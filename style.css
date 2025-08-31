@@ -1,0 +1,312 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    height: 100%;
+    overflow: hidden; /* 全体のスクロールを禁止 */
+}
+
+/* アプリケーション全体のコンテナ */
+#app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- 左側のコントロールパネル --- */
+#left-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    border-right: 1px solid #ddd;
+}
+
+#measurement-counter-group {
+    border: 1px solid black; /* 黒い枠線を追加 */
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#measurement-counter-group h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#calibration-section,
+#counter-section,
+#reset-section,
+#measurement-display,
+#unit-selector {
+    margin-bottom: 15px; /* グループ内のマージンを調整 */
+}
+
+#calibration-section:last-child,
+#counter-section:last-child,
+#reset-section:last-child,
+#measurement-display:last-child,
+#unit-selector:last-child {
+    margin-bottom: 0; /* 最後の要素の下マージンを削除 */
+}
+
+#calibration-section p {
+    margin: 5px 0;
+}
+#calibration-section .small-text {
+    font-size: 12px;
+    color: #555;
+}
+
+#calibration-btn,
+#add-btn,
+#reset-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#counter-section {
+    display: flex; /* ボタンを横並びに */
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px; /* カウンターセクションの下マージンを調整 */
+    gap: 10px; /* ボタン間の隙間 */
+}
+
+#counter-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+#measurement-display p {
+    font-size: 18px;
+    margin: 0;
+}
+
+#unit-selector button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+
+#unit-selector button.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+/* --- 右側の定規表示エリア --- */
+#ruler-area {
+    width: 80px; /* 定規の幅 + 余白 */
+    height: 100%;
+    display: flex;
+    justify-content: flex-end; /* 定規を右端に寄せる */
+    align-items: center; /* 定規を垂直中央に */
+    padding-right: 10px; /* 定規と画面端の間に少し余白 */
+    box-sizing: border-box;
+    background-color: lightblue; /* デバッグ用: エリアの背景色 */
+}
+
+#ruler {
+    width: 50px; /* 定規本体の幅 */
+    height: 0; /* JSで設定 */
+    border: 1px solid black;
+    border-right: none; /* 右端は画面端なので不要 */
+    position: relative;
+    box-sizing: border-box;
+    background: white;
+}
+
+/* 目盛り */
+#ruler .mark {
+    position: absolute;
+    right: 0; /* 右端を基準 */
+    height: 2px; /* 目盛り線を太く */
+    background-color: black;
+}
+
+#ruler .mark.cm {
+    width: 100%;
+}
+
+#ruler .mark.mm-5 {
+    width: 60%;
+}
+
+#ruler .mark.mm {
+    width: 40%;
+}
+
+#ruler .mark-bold {
+    height: 4px; /* 0cmと10cmの目盛りをさらに太く */
+}
+
+#ruler .mark-label {
+    position: absolute;
+    right: 55px; /* ラベルの位置 */
+    transform: translateY(50%); /* bottom基準なので調整 */
+    font-size: 12px;
+    background: white;
+    padding: 0 3px;
+}
+
+/* --- キャリブレーションパネル（オーバーレイ） --- */
+#calibration-sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* 初期状態では画面外 */
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    background-color: #f0f0f0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#calibration-sidebar.visible {
+    left: 0; /* 表示状態 */
+}
+
+#calibration-sidebar h2 {
+    margin-top: 0;
+}
+
+#calibration-bar-container {
+    width: 100px;
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: flex-start;
+}
+
+#calibration-bar {
+    width: 100%;
+    background-color: #3498db;
+    height: 150px;
+}
+
+#calibration-slider {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#save-calibration {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* --- スマホ表示 --- */
+@media (max-width: 600px) {
+    #app-container {
+        flex-direction: row; /* 左右に分割 */
+    }
+
+    #left-panel {
+        width: 60%; /* 左パネルの幅 */
+        height: 100%; /* 高さは画面全体 */
+        border-right: 1px solid #ddd; /* 右側にボーダー */
+        border-top: none; /* 上のボーダーを削除 */
+        padding: 10px; /* パディングを調整 */
+        position: static; /* 固定解除 */
+        bottom: auto;
+        left: auto;
+        justify-content: center; /* 縦方向中央寄せ */
+        padding-top: 0; /* 上部の余白をリセット */
+    }
+
+    #measurement-counter-group {
+        margin-bottom: 15px; /* スマホでのマージンを調整 */
+    }
+
+    #calibration-section,
+    #counter-section,
+    #reset-section,
+    #measurement-display,
+    #unit-selector {
+        margin-bottom: 10px; /* スマホでのマージンを小さく */
+    }
+
+    #calibration-section p,
+    #calibration-section .small-text {
+        font-size: 10px; /* フォントサイズを小さく */
+    }
+
+    #calibration-btn,
+    #add-btn,
+    #reset-btn {
+        padding: 5px 10px; /* ボタンのパディングを小さく */
+        font-size: 14px; /* フォントサイズを小さく */
+    }
+
+    #counter-value {
+        font-size: 18px; /* フォントサイズを小さく */
+    }
+
+    #measurement-display p {
+        font-size: 14px; /* フォントサイズを小さく */
+    }
+
+    #unit-selector button {
+        padding: 3px 8px; /* ボタンのパディングを小さく */
+        font-size: 12px; /* フォントサイズを小さく */
+    }
+
+    #ruler-area {
+        width: 40%; /* 右パネルの幅 */
+        flex-grow: 0; /* 成長しない */
+        padding-right: 0;
+        justify-content: flex-end; /* 定規を右端に寄せる */
+        align-items: center; /* 垂直中央に */
+        padding-bottom: 0;
+    }
+
+    #ruler {
+        width: 50px; /* 縦向き定規の幅 */
+        height: 90%; /* 画面の高さの大部分を占める */
+        border: 1px solid black; /* 全体にボーダー */
+        border-right: none; /* 右端は画面端なので不要 */
+    }
+
+    #ruler .mark {
+        right: 0; /* 右端を基準 */
+        height: 1px;
+        background-color: black;
+    }
+
+    #ruler .mark.cm {
+        width: 100%;
+    }
+
+    #ruler .mark.mm-5 {
+        width: 60%;
+    }
+
+    #ruler .mark.mm {
+        width: 40%;
+    }
+
+    #ruler .mark-label {
+        right: 55px; /* ラベルの位置 */
+        transform: translateY(50%); /* bottom基準なので調整 */
+        font-size: 10px; /* フォントサイズを小さく */
+        background: white;
+        padding: 0 2px;
+    }
+}

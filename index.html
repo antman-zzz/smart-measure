@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>スマート定規</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- キャリブレーション設定パネル（オーバーレイ） -->
+    <div id="calibration-sidebar">
+        <h2>キャリブレーション</h2>
+        <p>クレジットカード等（縦8.56cm）の長さに青いバーを合わせてください。</p>
+        <div id="calibration-bar-container">
+            <div id="calibration-bar"></div>
+        </div>
+        <input type="range" id="calibration-slider" min="50" max="500" value="150">
+        <button id="save-calibration">OK</button>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="app-container">
+        <!-- 左側のコントロールパネル -->
+        <div id="left-panel">
+            <div id="measurement-counter-group">
+                <h2>測定カウンター</h2>
+                <div id="counter-section">
+                    <button id="add-btn">+1</button>
+                    <button id="reset-btn">リセット</button>
+                </div>
+
+                <div id="measurement-display">
+                    <p>測定値: <span id="measurement-value">0</span></p>
+                </div>
+
+                <div id="unit-selector">
+                    <button class="unit-btn active" data-unit="cm">cm</button>
+                    <button class="unit-btn" data-unit="mm">mm</button>
+                    <button class="unit-btn" data-unit="inch">inch</button>
+                </div>
+            </div>
+
+            <div id="calibration-section">
+                <button id="calibration-btn">正確に測りたい方へ</button>
+                <p class="small-text">（クレジットカード等のサイズが必要です）</p>
+            </div>
+        </div>
+
+        <!-- 右側の定規表示エリア -->
+        <div id="ruler-area">
+            <div id="ruler"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
